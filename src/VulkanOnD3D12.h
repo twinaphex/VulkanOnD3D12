@@ -14,7 +14,4 @@
 
 #pragma once
 
-#ifndef VK_USE_PLATFORM_WIN32_KHR
-#define VK_USE_PLATFORM_WIN32_KHR
-#endif // !VK_USE_PLATFORM_WIN32_KHR
-#include <vulkan/vulkan.h>
+#include "VulkanOnD3D12Types.h"
