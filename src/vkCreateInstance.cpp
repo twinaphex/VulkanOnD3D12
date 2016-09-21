@@ -19,6 +19,24 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateInstance(
     const VkAllocationCallbacks* pAllocator,
     VkInstance*                  pInstance)
 {
+    VkInstance instance;
+    if (pAllocator)
+    {
+        instance = reinterpret_cast<VkInstance>(pAllocator->pfnAllocation(nullptr, sizeof(VkInstance_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE));
+    }
+    else
+    {
+        instance = new VkInstance_T();
+    }
+
+    HRESULT hr;
+    hr = CreateDXGIFactory2(0, IID_PPV_ARGS(&instance->factory));
+    if (FAILED(hr))
+    {
+    }
+
+    *pInstance = instance;
+
     return VK_SUCCESS;
 }
 

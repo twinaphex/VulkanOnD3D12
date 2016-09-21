@@ -19,16 +19,22 @@
 #endif // !VK_USE_PLATFORM_WIN32_KHR
 #include <vulkan/vulkan.h>
 
+#include <d3d12.h>
+#include <dxgi1_5.h>
+
 struct VkInstance_T
 {
+    IDXGIFactory5* factory;
 };
 
 struct VkPhysicalDevice_T
 {
+    IDXGIAdapter3* adapter;
 };
 
 struct VkDevice_T
 {
+    ID3D12Device1* device;
 };
 
 struct VkQueue_T

@@ -15,3 +15,9 @@
 #pragma once
 
 #include "VulkanOnD3D12Types.h"
+
+#include <wrl.h>
+
+#include <vector>
+
+using namespace Microsoft::WRL;

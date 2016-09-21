@@ -19,6 +19,23 @@ VkResult VKAPI_CALL VulkanOnD3D12EnumeratePhysicalDevices(
     uint32_t*         pPhysicalDeviceCount,
     VkPhysicalDevice* pPhysicalDevices)
 {
+    ComPtr<IDXGIAdapter1> adapter;
+    uint32_t              numAdapters = 0;
+    while (instance->factory->EnumAdapters1(numAdapters, &adapter) != DXGI_ERROR_NOT_FOUND)
+    {
+        auto physicalDevice = new VkPhysicalDevice_T();
+        adapter->QueryInterface(IID_PPV_ARGS(&physicalDevice->adapter));
+
+        if (pPhysicalDevices)
+        {
+            pPhysicalDevices[numAdapters] = physicalDevice;
+        }
+
+        ++numAdapters;
+    }
+
+    *pPhysicalDeviceCount = numAdapters;
+
     return VK_SUCCESS;
 }
 

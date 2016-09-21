@@ -20,6 +20,24 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateDevice(
     const VkAllocationCallbacks* pAllocator,
     VkDevice*                    pDevice)
 {
+    VkDevice device;
+    if (pAllocator)
+    {
+        device = reinterpret_cast<VkDevice>(pAllocator->pfnAllocation(nullptr, sizeof(VkDevice_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        device = new VkDevice_T();
+    }
+
+    HRESULT hr;
+    hr = D3D12CreateDevice(physicalDevice->adapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device->device));
+    if (FAILED(hr))
+    {
+    }
+
+    *pDevice = device;
+
     return VK_SUCCESS;
 }
 
