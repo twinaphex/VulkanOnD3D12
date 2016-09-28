@@ -19,6 +19,30 @@ VkResult VKAPI_CALL VulkanOnD3D12EnumerateInstanceExtensionProperties(
     uint32_t*              pPropertyCount,
     VkExtensionProperties* pProperties)
 {
+    std::vector<VkExtensionProperties> properties;
+
+    VkExtensionProperties win32Properties =
+        {
+            VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
+            VK_KHR_WIN32_SURFACE_SPEC_VERSION};
+    properties.push_back(win32Properties);
+
+    VkExtensionProperties surfaceProperties =
+        {
+            VK_KHR_SURFACE_EXTENSION_NAME,
+            VK_KHR_SURFACE_SPEC_VERSION};
+    properties.push_back(surfaceProperties);
+
+    if (pProperties)
+    {
+        for (auto i = 0; i < properties.size(); ++i)
+        {
+            pProperties[i] = properties[i];
+        }
+    }
+
+    *pPropertyCount = static_cast<uint32_t>(properties.size());
+
     return VK_SUCCESS;
 }
 

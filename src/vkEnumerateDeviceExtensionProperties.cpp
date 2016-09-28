@@ -20,6 +20,24 @@ VkResult VKAPI_CALL VulkanOnD3D12EnumerateDeviceExtensionProperties(
     uint32_t*              pPropertyCount,
     VkExtensionProperties* pProperties)
 {
+    std::vector<VkExtensionProperties> properties;
+
+    VkExtensionProperties swapchainProperties =
+        {
+            VK_KHR_SWAPCHAIN_EXTENSION_NAME,
+            VK_KHR_SWAPCHAIN_SPEC_VERSION};
+    properties.push_back(swapchainProperties);
+
+    if (pProperties)
+    {
+        for (auto i = 0; i < properties.size(); ++i)
+        {
+            pProperties[i] = properties[i];
+        }
+    }
+
+    *pPropertyCount = static_cast<uint32_t>(properties.size());
+
     return VK_SUCCESS;
 }
 
