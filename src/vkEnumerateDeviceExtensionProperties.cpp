@@ -22,10 +22,7 @@ VkResult VKAPI_CALL VulkanOnD3D12EnumerateDeviceExtensionProperties(
 {
     std::vector<VkExtensionProperties> properties;
 
-    VkExtensionProperties swapchainProperties =
-        {
-            VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-            VK_KHR_SWAPCHAIN_SPEC_VERSION};
+    VkExtensionProperties swapchainProperties = {VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_KHR_SWAPCHAIN_SPEC_VERSION};
     properties.push_back(swapchainProperties);
 
     if (pProperties)
