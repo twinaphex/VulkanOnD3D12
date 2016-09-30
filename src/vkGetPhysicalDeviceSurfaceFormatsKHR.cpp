@@ -20,6 +20,18 @@ VkResult VKAPI_CALL VulkanOnD3D12GetPhysicalDeviceSurfaceFormatsKHR(
     uint32_t*           pSurfaceFormatCount,
     VkSurfaceFormatKHR* pSurfaceFormats)
 {
+    if (pSurfaceFormats)
+    {
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/hh404528(v=vs.85).aspx
+        pSurfaceFormats[0].format = VK_FORMAT_B8G8R8A8_UNORM;
+        pSurfaceFormats[1].format = VK_FORMAT_B8G8R8A8_SRGB;
+        pSurfaceFormats[2].format = VK_FORMAT_R8G8B8A8_UNORM;
+        pSurfaceFormats[3].format = VK_FORMAT_R8G8B8A8_SRGB;
+        pSurfaceFormats[4].format = VK_FORMAT_R16G16B16A16_SFLOAT;
+    }
+
+    *pSurfaceFormatCount = 5;
+
     return VK_SUCCESS;
 }
 
