@@ -30,6 +30,7 @@ struct VkInstance_T
 struct VkPhysicalDevice_T
 {
     IDXGIAdapter3* adapter;
+    DXGI_ADAPTER_DESC2 desc;
 };
 
 struct VkDevice_T

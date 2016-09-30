@@ -18,9 +18,6 @@ void VKAPI_CALL VulkanOnD3D12GetPhysicalDeviceProperties(
     VkPhysicalDevice            physicalDevice,
     VkPhysicalDeviceProperties* pProperties)
 {
-    DXGI_ADAPTER_DESC2 desc = {};
-    physicalDevice->adapter->GetDesc2(&desc);
-
     VkPhysicalDeviceLimits limits                          = {};
     limits.maxImageDimension1D                             = D3D12_REQ_TEXTURE1D_U_DIMENSION;
     limits.maxImageDimension2D                             = D3D12_REQ_TEXTURE2D_U_OR_V_DIMENSION;
@@ -146,15 +143,15 @@ void VKAPI_CALL VulkanOnD3D12GetPhysicalDeviceProperties(
 
     VkPhysicalDeviceProperties properties = {};
     properties.apiVersion                 = VK_MAKE_VERSION(VK_VERSION_MAJOR(VK_API_VERSION_1_0), VK_VERSION_MINOR(VK_API_VERSION_1_0), VK_VERSION_PATCH(VK_HEADER_VERSION));
-    properties.driverVersion              = desc.Revision;
-    properties.vendorID                   = desc.VendorId;
-    properties.deviceID                   = desc.DeviceId;
-    properties.deviceType                 = desc.Flags == DXGI_ADAPTER_FLAG_SOFTWARE ? VK_PHYSICAL_DEVICE_TYPE_CPU : VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
+    properties.driverVersion              = physicalDevice->desc.Revision;
+    properties.vendorID                   = physicalDevice->desc.VendorId;
+    properties.deviceID                   = physicalDevice->desc.DeviceId;
+    properties.deviceType                 = physicalDevice->desc.Flags == DXGI_ADAPTER_FLAG_SOFTWARE ? VK_PHYSICAL_DEVICE_TYPE_CPU : VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
     properties.limits                     = limits;
     properties.sparseProperties           = sparseProperties;
 
-    snprintf(reinterpret_cast<char*>(&properties.pipelineCacheUUID), VK_UUID_SIZE, "chb-%i", desc.AdapterLuid.LowPart);
-    wcstombs_s(nullptr, properties.deviceName, desc.Description, 256);
+    snprintf(reinterpret_cast<char*>(&properties.pipelineCacheUUID), VK_UUID_SIZE, "chb-%i", physicalDevice->desc.AdapterLuid.LowPart);
+    wcstombs_s(nullptr, properties.deviceName, physicalDevice->desc.Description, 256);
 
     *pProperties = properties;
 }
