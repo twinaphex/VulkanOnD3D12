@@ -24,8 +24,15 @@ VkResult VKAPI_CALL VulkanOnD3D12EnumerateInstanceExtensionProperties(
     VkExtensionProperties surfaceProperties = {VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_SURFACE_SPEC_VERSION};
     properties.push_back(surfaceProperties);
 
+#ifdef VK_USE_PLATFORM_WIN32_KHR
     VkExtensionProperties win32Properties = {VK_KHR_WIN32_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_SPEC_VERSION};
     properties.push_back(win32Properties);
+#endif // VK_USE_PLATFORM_WIN32_KHR
+
+#ifdef VK_USE_PLATFORM_UAP_CHB
+    VkExtensionProperties uapProperties = {VK_CHB_UAP_SURFACE_EXTENSION_NAME, VK_CHB_UAP_SURFACE_SPEC_VERSION};
+    properties.push_back(uapProperties);
+#endif // VK_USE_PLATFORM_UAP_CHB
 
     if (pProperties)
     {

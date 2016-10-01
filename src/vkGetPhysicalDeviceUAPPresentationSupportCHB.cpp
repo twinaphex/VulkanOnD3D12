@@ -14,9 +14,9 @@
 
 #include "VulkanOnD3D12.h"
 
-#ifdef VK_USE_PLATFORM_WIN32_KHR
+#ifdef VK_USE_PLATFORM_UAP_CHB
 
-VkBool32 VKAPI_CALL VulkanOnD3D12GetPhysicalDeviceWin32PresentationSupportKHR(
+VkBool32 VKAPI_CALL VulkanOnD3D12GetPhysicalDeviceUAPPresentationSupportCHB(
     VkPhysicalDevice physicalDevice,
     uint32_t         queueFamilyIndex)
 {
@@ -24,14 +24,14 @@ VkBool32 VKAPI_CALL VulkanOnD3D12GetPhysicalDeviceWin32PresentationSupportKHR(
 }
 
 extern "C" {
-VKAPI_ATTR VkBool32 VKAPI_CALL vkGetPhysicalDeviceWin32PresentationSupportKHR(
+VKAPI_ATTR VkBool32 VKAPI_CALL vkGetPhysicalDeviceUAPPresentationSupportCHB(
     VkPhysicalDevice physicalDevice,
     uint32_t         queueFamilyIndex)
 {
-    return VulkanOnD3D12GetPhysicalDeviceWin32PresentationSupportKHR(
+    return VulkanOnD3D12GetPhysicalDeviceUAPPresentationSupportCHB(
         physicalDevice,
         queueFamilyIndex);
 }
 }
 
-#endif // VK_USE_PLATFORM_WIN32_KHR
+#endif // VK_USE_PLATFORM_UAP_CHB

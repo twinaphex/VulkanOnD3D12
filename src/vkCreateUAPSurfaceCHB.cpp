@@ -14,25 +14,25 @@
 
 #include "VulkanOnD3D12.h"
 
-#ifdef VK_USE_PLATFORM_WIN32_KHR
+#ifdef VK_USE_PLATFORM_UAP_CHB
 
-VkResult VKAPI_CALL VulkanOnD3D12CreateWin32SurfaceKHR(
-    VkInstance                         instance,
-    const VkWin32SurfaceCreateInfoKHR* pCreateInfo,
-    const VkAllocationCallbacks*       pAllocator,
-    VkSurfaceKHR*                      pSurface)
+VkResult VKAPI_CALL VulkanOnD3D12CreateUAPSurfaceCHB(
+    VkInstance                       instance,
+    const VkUAPSurfaceCreateInfoCHB* pCreateInfo,
+    const VkAllocationCallbacks*     pAllocator,
+    VkSurfaceKHR*                    pSurface)
 {
     return VK_SUCCESS;
 }
 
 extern "C" {
-VKAPI_ATTR VkResult VKAPI_CALL vkCreateWin32SurfaceKHR(
-    VkInstance                         instance,
-    const VkWin32SurfaceCreateInfoKHR* pCreateInfo,
-    const VkAllocationCallbacks*       pAllocator,
-    VkSurfaceKHR*                      pSurface)
+VKAPI_ATTR VkResult VKAPI_CALL vkCreateUAPSurfaceCHB(
+    VkInstance                       instance,
+    const VkUAPSurfaceCreateInfoCHB* pCreateInfo,
+    const VkAllocationCallbacks*     pAllocator,
+    VkSurfaceKHR*                    pSurface)
 {
-    return VulkanOnD3D12CreateWin32SurfaceKHR(
+    return VulkanOnD3D12CreateUAPSurfaceCHB(
         instance,
         pCreateInfo,
         pAllocator,
@@ -40,4 +40,4 @@ VKAPI_ATTR VkResult VKAPI_CALL vkCreateWin32SurfaceKHR(
 }
 }
 
-#endif // VK_USE_PLATFORM_WIN32_KHR
+#endif // VK_USE_PLATFORM_UAP_CHB
