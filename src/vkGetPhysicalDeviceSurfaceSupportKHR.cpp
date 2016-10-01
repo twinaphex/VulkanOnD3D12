@@ -20,6 +20,8 @@ VkResult VKAPI_CALL VulkanOnD3D12GetPhysicalDeviceSurfaceSupportKHR(
     VkSurfaceKHR     surface,
     VkBool32*        pSupported)
 {
+    *pSupported = VK_TRUE;
+
     return VK_SUCCESS;
 }
 
