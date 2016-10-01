@@ -19,6 +19,17 @@ void VKAPI_CALL VulkanOnD3D12GetPhysicalDeviceQueueFamilyProperties(
     uint32_t*                pQueueFamilyPropertyCount,
     VkQueueFamilyProperties* pQueueFamilyProperties)
 {
+    if (pQueueFamilyProperties)
+    {
+        pQueueFamilyProperties[0].queueFlags                         = VK_QUEUE_GRAPHICS_BIT;
+        pQueueFamilyProperties[0].queueCount                         = 1;
+        pQueueFamilyProperties[0].timestampValidBits                 = 64;
+        pQueueFamilyProperties[0].minImageTransferGranularity.width  = 1;
+        pQueueFamilyProperties[0].minImageTransferGranularity.height = 1;
+        pQueueFamilyProperties[0].minImageTransferGranularity.depth  = 1;
+    }
+
+    *pQueueFamilyPropertyCount = 1;
 }
 
 extern "C" {
