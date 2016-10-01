@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.0)
 
 add_definitions(-DVK_USE_PLATFORM_WIN32_KHR -D_USE_MATH_DEFINES -D_CRT_SECURE_NO_WARNINGS)
 

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.0)
 
 add_definitions("/DUNICODE /D_UNICODE /W4 /YuVulkanOnD3D12.h")
 
