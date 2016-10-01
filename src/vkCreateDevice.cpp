@@ -34,6 +34,7 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateDevice(
     hr = D3D12CreateDevice(physicalDevice->adapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device->device));
     if (FAILED(hr))
     {
+        return VkResultFromHRESULT(hr);
     }
 
     *pDevice = device;

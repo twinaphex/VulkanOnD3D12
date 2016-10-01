@@ -19,6 +19,14 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateInstance(
     const VkAllocationCallbacks* pAllocator,
     VkInstance*                  pInstance)
 {
+    HRESULT               hr;
+    ComPtr<ID3D12Device1> device;
+    hr = D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device));
+    if (FAILED(hr))
+    {
+        return VkResultFromHRESULT(hr);
+    }
+
     VkInstance instance;
     if (pAllocator)
     {
@@ -29,10 +37,10 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateInstance(
         instance = new VkInstance_T();
     }
 
-    HRESULT hr;
     hr = CreateDXGIFactory2(0, IID_PPV_ARGS(&instance->factory));
     if (FAILED(hr))
     {
+        return VkResultFromHRESULT(hr);
     }
 
     *pInstance = instance;

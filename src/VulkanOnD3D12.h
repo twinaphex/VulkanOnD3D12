@@ -21,3 +21,16 @@
 #include <vector>
 
 using namespace Microsoft::WRL;
+
+inline auto VkResultFromHRESULT(HRESULT hr)
+{
+    switch (hr)
+    {
+    case E_OUTOFMEMORY:
+        return VK_ERROR_OUT_OF_HOST_MEMORY;
+    case DXGI_ERROR_UNSUPPORTED:
+        return VK_ERROR_INCOMPATIBLE_DRIVER;
+    default:
+        return VK_ERROR_INITIALIZATION_FAILED;
+    }
+}
