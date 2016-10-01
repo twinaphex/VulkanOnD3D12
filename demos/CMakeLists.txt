@@ -6,6 +6,8 @@ include_directories(../src)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL Windows)
 
+add_definitions("/DVK_USE_PLATFORM_WIN32_KHR")
+
 add_executable(VulkanOnD3D12-cube WIN32 cube.c)
 target_link_libraries(VulkanOnD3D12-cube VulkanOnD3D12 d3d12 dxgi)
 add_executable(VulkanOnD3D12-tri WIN32 tri.c)
