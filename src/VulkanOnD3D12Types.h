@@ -37,7 +37,7 @@ struct VkInstance_T
 
 struct VkPhysicalDevice_T
 {
-    IDXGIAdapter3* adapter;
+    IDXGIAdapter3*     adapter;
     DXGI_ADAPTER_DESC2 desc;
 };
 
@@ -136,6 +136,9 @@ struct VkCommandPool_T
 
 struct VkSurfaceKHR_T
 {
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    HWND hwnd;
+#endif // VK_USE_PLATFORM_WIN32_KHR
 };
 
 struct VkSwapchainKHR_T
