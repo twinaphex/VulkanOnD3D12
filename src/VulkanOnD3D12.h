@@ -29,7 +29,7 @@ inline auto VkResultFromHRESULT(HRESULT hr)
     case E_OUTOFMEMORY:
         return VK_ERROR_OUT_OF_HOST_MEMORY;
     case DXGI_ERROR_UNSUPPORTED:
-        return VK_ERROR_INCOMPATIBLE_DRIVER;
+        return VK_ERROR_INITIALIZATION_FAILED;
     default:
         return VK_ERROR_INITIALIZATION_FAILED;
     }
