@@ -75,6 +75,26 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateSwapchainKHR(
 
     swapchain->desc = desc;
 
+    D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
+    rtvHeapDesc.Type                       = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+    rtvHeapDesc.NumDescriptors             = pCreateInfo->minImageCount;
+
+    hr = device->device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&device->rtvHeap));
+    if (FAILED(hr))
+    {
+        return VkResultFromHRESULT(hr);
+    }
+
+    D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc = {};
+    dsvHeapDesc.Type                       = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+    dsvHeapDesc.NumDescriptors             = 1;
+
+    hr = device->device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&device->dsvHeap));
+    if (FAILED(hr))
+    {
+        return VkResultFromHRESULT(hr);
+    }
+
     *pSwapchain = swapchain;
 
     return VK_SUCCESS;

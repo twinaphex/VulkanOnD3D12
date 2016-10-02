@@ -20,6 +20,42 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateImageView(
     const VkAllocationCallbacks* pAllocator,
     VkImageView*                 pView)
 {
+    VkImageView view;
+    if (pAllocator)
+    {
+        view = reinterpret_cast<VkImageView>(pAllocator->pfnAllocation(nullptr, sizeof(VkImageView_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        view = new VkImageView_T();
+    }
+
+    DXGI_FORMAT format = DXGI_FORMAT_B8G8R8A8_UNORM;
+
+    if (pCreateInfo->image->texture->GetDesc().Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET)
+    {
+        view->handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(device->rtvHeap->GetCPUDescriptorHandleForHeapStart());
+
+        D3D12_RENDER_TARGET_VIEW_DESC desc = {};
+        desc.Format                        = format;
+
+        device->device->CreateRenderTargetView(pCreateInfo->image->texture, &desc, view->handle);
+        view->handle.Offset(device->device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
+    }
+
+    if (pCreateInfo->image->texture->GetDesc().Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL)
+    {
+        view->handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(device->dsvHeap->GetCPUDescriptorHandleForHeapStart());
+
+        D3D12_DEPTH_STENCIL_VIEW_DESC desc = {};
+        desc.Format                        = format;
+
+        device->device->CreateDepthStencilView(pCreateInfo->image->texture, &desc, view->handle);
+        view->handle.Offset(device->device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV));
+    }
+
+    *pView = view;
+
     return VK_SUCCESS;
 }
 

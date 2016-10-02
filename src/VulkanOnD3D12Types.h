@@ -29,8 +29,11 @@
 
 #include "d3dx12.h"
 #include <dxgi1_5.h>
+#include <wrl.h>
 
 #include <vector>
+
+using namespace Microsoft::WRL;
 
 struct VkInstance_T
 {
@@ -46,9 +49,11 @@ struct VkPhysicalDevice_T
 
 struct VkDevice_T
 {
-    ID3D12Device1*       device;
-    std::vector<VkQueue> queues;
-    VkPhysicalDevice     physicalDevice;
+    ID3D12Device1*               device;
+    ComPtr<ID3D12DescriptorHeap> rtvHeap;
+    ComPtr<ID3D12DescriptorHeap> dsvHeap;
+    std::vector<VkQueue>         queues;
+    VkPhysicalDevice             physicalDevice;
 };
 
 struct VkQueue_T
@@ -96,6 +101,7 @@ struct VkBufferView_T
 
 struct VkImageView_T
 {
+    CD3DX12_CPU_DESCRIPTOR_HANDLE handle;
 };
 
 struct VkShaderModule_T
