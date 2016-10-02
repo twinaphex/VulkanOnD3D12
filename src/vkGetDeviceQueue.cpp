@@ -20,6 +20,7 @@ void VKAPI_CALL VulkanOnD3D12GetDeviceQueue(
     uint32_t queueIndex,
     VkQueue* pQueue)
 {
+    *pQueue = device->queues[queueIndex];
 }
 
 extern "C" {

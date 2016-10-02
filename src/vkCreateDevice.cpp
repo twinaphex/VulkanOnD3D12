@@ -37,6 +37,32 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateDevice(
         return VkResultFromHRESULT(hr);
     }
 
+    for (auto i = 0; i < pCreateInfo->queueCreateInfoCount; ++i)
+    {
+        VkQueue queue;
+        if (pAllocator)
+        {
+            queue = reinterpret_cast<VkQueue>(pAllocator->pfnAllocation(nullptr, sizeof(VkQueue_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+        }
+        else
+        {
+            queue = new VkQueue_T();
+        }
+
+        D3D12_COMMAND_QUEUE_DESC desc = {};
+        desc.Type                     = D3D12_COMMAND_LIST_TYPE_DIRECT;
+        desc.Priority                 = static_cast<int>(pCreateInfo->pQueueCreateInfos->pQueuePriorities[i]) <= 0 ? D3D12_COMMAND_QUEUE_PRIORITY_NORMAL : D3D12_COMMAND_QUEUE_PRIORITY_HIGH;
+        desc.Flags                    = D3D12_COMMAND_QUEUE_FLAG_NONE;
+        desc.NodeMask                 = 0;
+
+        hr = device->device->CreateCommandQueue(&desc, IID_PPV_ARGS(&queue->queue));
+        if (FAILED(hr))
+        {
+            return VkResultFromHRESULT(hr);
+        }
+        device->queues.push_back(queue);
+    }
+
     *pDevice = device;
 
     return VK_SUCCESS;

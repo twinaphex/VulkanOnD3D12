@@ -27,8 +27,10 @@
 #endif // WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
 #include <vulkan/vulkan.h>
 
-#include <d3d12.h>
+#include "d3dx12.h"
 #include <dxgi1_5.h>
+
+#include <vector>
 
 struct VkInstance_T
 {
@@ -43,11 +45,13 @@ struct VkPhysicalDevice_T
 
 struct VkDevice_T
 {
-    ID3D12Device1* device;
+    ID3D12Device1*       device;
+    std::vector<VkQueue> queues;
 };
 
 struct VkQueue_T
 {
+    ID3D12CommandQueue* queue;
 };
 
 struct VkSemaphore_T
