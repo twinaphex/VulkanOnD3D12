@@ -48,8 +48,10 @@ namespace UAPExample
         VkResult res;
 
         VkUAPSurfaceCreateInfoCHB surfaceCreateInfo = {};
+        surfaceCreateInfo.sType                     = VK_STRUCTURE_TYPE_UAP_SURFACE_CREATE_INFO_CHB;
         surfaceCreateInfo.window                    = reinterpret_cast<IUnknown*>(window);
-        res                                         = vkCreateUAPSurfaceCHB(instance_, &surfaceCreateInfo, nullptr, &surface_);
+
+        res = vkCreateUAPSurfaceCHB(instance_, &surfaceCreateInfo, nullptr, &surface_);
         if (res != VK_SUCCESS)
         {
             throw std::runtime_error("vkCreateUAPSurfaceCHB failed");
