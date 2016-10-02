@@ -19,6 +19,30 @@ VkResult VKAPI_CALL VulkanOnD3D12GetPhysicalDeviceSurfaceCapabilitiesKHR(
     VkSurfaceKHR              surface,
     VkSurfaceCapabilitiesKHR* pSurfaceCapabilities)
 {
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    RECT rect = {};
+    GetClientRect(surface->hwnd, &rect);
+#endif // VK_USE_PLATFORM_WIN32_KHR
+
+    VkSurfaceCapabilitiesKHR surfaceCapabilities = {};
+    surfaceCapabilities.minImageCount            = 2;
+    surfaceCapabilities.maxImageCount            = 8;
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    surfaceCapabilities.currentExtent.width  = rect.right - rect.left;
+    surfaceCapabilities.currentExtent.height = rect.bottom - rect.top;
+#endif // VK_USE_PLATFORM_WIN32_KHR
+    surfaceCapabilities.minImageExtent.width  = 1;
+    surfaceCapabilities.minImageExtent.height = 1;
+    surfaceCapabilities.maxImageExtent.width  = D3D12_REQ_TEXTURE2D_U_OR_V_DIMENSION;
+    surfaceCapabilities.maxImageExtent.height = D3D12_REQ_TEXTURE2D_U_OR_V_DIMENSION;
+    surfaceCapabilities.maxImageArrayLayers   = D3D12_REQ_TEXTURE2D_ARRAY_AXIS_DIMENSION;
+    surfaceCapabilities.supportedTransforms   = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR | VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR | VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR | VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR;
+    surfaceCapabilities.currentTransform      = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+    surfaceCapabilities.supportedCompositeAlpha;
+    surfaceCapabilities.supportedUsageFlags;
+
+    *pSurfaceCapabilities = surfaceCapabilities;
+
     return VK_SUCCESS;
 }
 
