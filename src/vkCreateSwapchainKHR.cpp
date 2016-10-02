@@ -73,6 +73,8 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateSwapchainKHR(
         return VkResultFromHRESULT(hr);
     }
 
+    swapchain->desc = desc;
+
     *pSwapchain = swapchain;
 
     return VK_SUCCESS;

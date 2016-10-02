@@ -20,6 +20,25 @@ VkResult VKAPI_CALL VulkanOnD3D12GetSwapchainImagesKHR(
     uint32_t*      pSwapchainImageCount,
     VkImage*       pSwapchainImages)
 {
+    if (pSwapchainImages)
+    {
+        for (auto i = 0; i < swapchain->desc.BufferCount; ++i)
+        {
+            VkImage image = new VkImage_T();
+
+            HRESULT hr;
+            hr = swapchain->swapChain->GetBuffer(i, IID_PPV_ARGS(&image->texture));
+            if (FAILED(hr))
+            {
+                return VkResultFromHRESULT(hr);
+            }
+
+            pSwapchainImages[i] = image;
+        }
+    }
+
+    *pSwapchainImageCount = swapchain->desc.BufferCount;
+
     return VK_SUCCESS;
 }
 

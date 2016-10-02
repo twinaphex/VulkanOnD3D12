@@ -79,6 +79,7 @@ struct VkBuffer_T
 
 struct VkImage_T
 {
+    ID3D12Resource* texture;
 };
 
 struct VkEvent_T
@@ -151,7 +152,8 @@ struct VkSurfaceKHR_T
 
 struct VkSwapchainKHR_T
 {
-    IDXGISwapChain4* swapChain;
+    IDXGISwapChain4*      swapChain;
+    DXGI_SWAP_CHAIN_DESC1 desc;
 };
 
 struct VkDisplayKHR_T
