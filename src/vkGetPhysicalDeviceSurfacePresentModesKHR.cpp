@@ -20,6 +20,13 @@ VkResult VKAPI_CALL VulkanOnD3D12GetPhysicalDeviceSurfacePresentModesKHR(
     uint32_t*         pPresentModeCount,
     VkPresentModeKHR* pPresentModes)
 {
+    if (pPresentModes)
+    {
+        pPresentModes[0] = VK_PRESENT_MODE_FIFO_KHR;
+    }
+
+    *pPresentModeCount = 1;
+
     return VK_SUCCESS;
 }
 
