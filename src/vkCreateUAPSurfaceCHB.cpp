@@ -22,6 +22,20 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateUAPSurfaceCHB(
     const VkAllocationCallbacks*     pAllocator,
     VkSurfaceKHR*                    pSurface)
 {
+    VkSurfaceKHR surface;
+    if (pAllocator)
+    {
+        surface = reinterpret_cast<VkSurfaceKHR>(pAllocator->pfnAllocation(nullptr, sizeof(VkDevice_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        surface = new VkSurfaceKHR_T();
+    }
+
+    surface->window = pCreateInfo->window;
+
+    *pSurface = surface;
+
     return VK_SUCCESS;
 }
 

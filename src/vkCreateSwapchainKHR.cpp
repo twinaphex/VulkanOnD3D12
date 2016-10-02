@@ -61,6 +61,8 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateSwapchainKHR(
     auto                    queue = device->queues[0]->queue;
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     hr = device->physicalDevice->instance->factory->CreateSwapChainForHwnd(queue, pCreateInfo->surface->hwnd, &desc, nullptr, nullptr, &swapChain);
+#else
+    hr = device->physicalDevice->instance->factory->CreateSwapChainForCoreWindow(queue, pCreateInfo->surface->window, &desc, nullptr, &swapChain);
 #endif // VK_USE_PLATFORM_WIN32_KHR
     if (FAILED(hr))
     {

@@ -153,6 +153,8 @@ struct VkSurfaceKHR_T
 {
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     HWND hwnd;
+#else
+    IUnknown* window;
 #endif // VK_USE_PLATFORM_WIN32_KHR
 };
 
