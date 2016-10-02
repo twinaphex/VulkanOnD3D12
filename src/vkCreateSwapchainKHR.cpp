@@ -20,6 +20,61 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateSwapchainKHR(
     const VkAllocationCallbacks*    pAllocator,
     VkSwapchainKHR*                 pSwapchain)
 {
+    VkSwapchainKHR swapchain;
+    if (pAllocator)
+    {
+        swapchain = reinterpret_cast<VkSwapchainKHR>(pAllocator->pfnAllocation(nullptr, sizeof(VkSwapchainKHR_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        swapchain = new VkSwapchainKHR_T();
+    }
+
+    DXGI_SWAP_CHAIN_DESC1 desc = {};
+    desc.Width                 = pCreateInfo->imageExtent.width;
+    desc.Height                = pCreateInfo->imageExtent.height;
+    desc.Stereo                = false;
+    desc.SampleDesc.Count      = 1;
+    desc.SampleDesc.Quality    = 0;
+    desc.BufferUsage           = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    desc.BufferCount           = pCreateInfo->minImageCount;
+    desc.Scaling;
+    desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+    desc.AlphaMode;
+    desc.Flags;
+
+    if (pCreateInfo->imageFormat == VK_FORMAT_R16G16B16A16_SFLOAT)
+    {
+        desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+    }
+    else if (pCreateInfo->imageFormat == VK_FORMAT_R8G8B8A8_UNORM || pCreateInfo->imageFormat == VK_FORMAT_R8G8B8A8_SRGB)
+    {
+        desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    }
+    else
+    {
+        desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+    }
+
+    HRESULT                 hr;
+    ComPtr<IDXGISwapChain1> swapChain;
+    auto                    queue = device->queues[0]->queue;
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    hr = device->physicalDevice->instance->factory->CreateSwapChainForHwnd(queue, pCreateInfo->surface->hwnd, &desc, nullptr, nullptr, &swapChain);
+#endif // VK_USE_PLATFORM_WIN32_KHR
+    if (FAILED(hr))
+    {
+        return VkResultFromHRESULT(hr);
+    }
+
+    hr = swapChain->QueryInterface(IID_PPV_ARGS(&swapchain->swapChain));
+    if (FAILED(hr))
+    {
+        return VkResultFromHRESULT(hr);
+    }
+
+    *pSwapchain = swapchain;
+
     return VK_SUCCESS;
 }
 

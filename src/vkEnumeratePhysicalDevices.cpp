@@ -26,6 +26,7 @@ VkResult VKAPI_CALL VulkanOnD3D12EnumeratePhysicalDevices(
         auto physicalDevice = new VkPhysicalDevice_T();
         adapter->QueryInterface(IID_PPV_ARGS(&physicalDevice->adapter));
         physicalDevice->adapter->GetDesc2(&physicalDevice->desc);
+        physicalDevice->instance = instance;
 
         if (pPhysicalDevices)
         {

@@ -63,6 +63,8 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateDevice(
         device->queues.push_back(queue);
     }
 
+    device->physicalDevice = physicalDevice;
+
     *pDevice = device;
 
     return VK_SUCCESS;

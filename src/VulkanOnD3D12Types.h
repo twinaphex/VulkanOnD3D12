@@ -41,12 +41,14 @@ struct VkPhysicalDevice_T
 {
     IDXGIAdapter3*     adapter;
     DXGI_ADAPTER_DESC2 desc;
+    VkInstance         instance;
 };
 
 struct VkDevice_T
 {
     ID3D12Device1*       device;
     std::vector<VkQueue> queues;
+    VkPhysicalDevice     physicalDevice;
 };
 
 struct VkQueue_T
@@ -149,6 +151,7 @@ struct VkSurfaceKHR_T
 
 struct VkSwapchainKHR_T
 {
+    IDXGISwapChain4* swapChain;
 };
 
 struct VkDisplayKHR_T
