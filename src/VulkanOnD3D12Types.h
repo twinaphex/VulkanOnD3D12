@@ -60,6 +60,7 @@ struct VkSemaphore_T
 
 struct VkCommandBuffer_T
 {
+    ID3D12CommandList* list;
 };
 
 struct VkFence_T
@@ -136,6 +137,7 @@ struct VkFramebuffer_T
 
 struct VkCommandPool_T
 {
+    ID3D12CommandAllocator* allocator;
 };
 
 struct VkSurfaceKHR_T

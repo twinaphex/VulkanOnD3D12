@@ -19,6 +19,19 @@ VkResult VKAPI_CALL VulkanOnD3D12AllocateCommandBuffers(
     const VkCommandBufferAllocateInfo* pAllocateInfo,
     VkCommandBuffer*                   pCommandBuffers)
 {
+    std::vector<VkCommandBuffer> commandBuffers;
+    for (auto i = 0; i < pAllocateInfo->commandBufferCount; ++i)
+    {
+        pCommandBuffers[i] = new VkCommandBuffer_T();
+
+        HRESULT hr;
+        hr = device->device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, pAllocateInfo->commandPool->allocator, nullptr, IID_PPV_ARGS(&pCommandBuffers[i]->list));
+        if (FAILED(hr))
+        {
+            return VkResultFromHRESULT(hr);
+        }
+    }
+
     return VK_SUCCESS;
 }
 

@@ -20,6 +20,25 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateCommandPool(
     const VkAllocationCallbacks*   pAllocator,
     VkCommandPool*                 pCommandPool)
 {
+    VkCommandPool commandPool;
+    if (pAllocator)
+    {
+        commandPool = reinterpret_cast<VkCommandPool>(pAllocator->pfnAllocation(nullptr, sizeof(VkCommandPool_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        commandPool = new VkCommandPool_T();
+    }
+
+    HRESULT hr;
+    hr = device->device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandPool->allocator));
+    if (FAILED(hr))
+    {
+        return VkResultFromHRESULT(hr);
+    }
+
+    *pCommandPool = commandPool;
+
     return VK_SUCCESS;
 }
 
