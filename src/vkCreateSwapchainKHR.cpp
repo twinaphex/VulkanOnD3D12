@@ -30,6 +30,16 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateSwapchainKHR(
         swapchain = new VkSwapchainKHR_T();
     }
 
+    DXGI_SWAP_EFFECT swapEffect;
+    if (pCreateInfo->clipped)
+    {
+        swapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+    }
+    else
+    {
+        swapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+    }
+
     DXGI_SWAP_CHAIN_DESC1 desc = {};
     desc.Width                 = pCreateInfo->imageExtent.width;
     desc.Height                = pCreateInfo->imageExtent.height;
@@ -39,7 +49,7 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateSwapchainKHR(
     desc.BufferUsage           = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     desc.BufferCount           = pCreateInfo->minImageCount;
     desc.Scaling;
-    desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+    desc.SwapEffect = swapEffect;
     desc.AlphaMode;
     desc.Flags;
 

@@ -21,6 +21,8 @@ namespace UAPExample
         VkInstance   instance_;
         VkDevice     device_;
         VkSurfaceKHR surface_;
+        VkSwapchainKHR swapchain_;
+        std::vector<VkImage> swapchanImages_;
     };
 
     ref class AppSource sealed : public Windows::ApplicationModel::Core::IFrameworkViewSource
