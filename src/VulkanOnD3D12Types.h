@@ -37,15 +37,25 @@ using namespace Microsoft::WRL;
 
 struct VkInstance_T
 {
-    IDXGIFactory5* factory;
+    ComPtr<IDXGIFactory5> factory;
+
+    auto Get() const
+    {
+        return factory.Get();
+    }
 };
 
 struct VkPhysicalDevice_T
 {
-    IDXGIAdapter3*     adapter;
-    DXGI_ADAPTER_DESC2 desc;
-    uint32_t           index;
-    VkInstance         instance;
+    ComPtr<IDXGIAdapter3> adapter;
+    DXGI_ADAPTER_DESC2    desc;
+    uint32_t              index;
+    VkInstance            instance;
+
+    auto Get() const
+    {
+        return adapter.Get();
+    }
 };
 
 struct VkDevice_T

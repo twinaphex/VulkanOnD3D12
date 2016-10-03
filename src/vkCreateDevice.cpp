@@ -32,20 +32,20 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateDevice(
 
     HRESULT hr;
     ComPtr<ID3D12Debug1> debug;
-    D3D12GetDebugInterface(IID_PPV_ARGS(&debug));
+    hr = D3D12GetDebugInterface(IID_PPV_ARGS(&debug));
     if (FAILED(hr))
     {
         return VkResultFromHRESULT(hr);
     }
     debug->EnableDebugLayer();
 
-    hr = D3D12CreateDevice(physicalDevice->adapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device->device));
+    hr = D3D12CreateDevice(physicalDevice->Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device->device));
     if (FAILED(hr))
     {
         return VkResultFromHRESULT(hr);
     }
 
-    for (auto i = 0; i < pCreateInfo->queueCreateInfoCount; ++i)
+    for (uint32_t i = 0; i < pCreateInfo->queueCreateInfoCount; ++i)
     {
         VkQueue queue;
         if (pAllocator)

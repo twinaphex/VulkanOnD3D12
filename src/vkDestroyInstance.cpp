@@ -18,8 +18,6 @@ void VKAPI_CALL VulkanOnD3D12DestroyInstance(
     VkInstance                   instance,
     const VkAllocationCallbacks* pAllocator)
 {
-    instance->factory->Release();
-
     if (pAllocator)
     {
         pAllocator->pfnFree(nullptr, instance);

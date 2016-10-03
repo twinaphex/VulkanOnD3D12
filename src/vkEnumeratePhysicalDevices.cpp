@@ -19,24 +19,37 @@ VkResult VKAPI_CALL VulkanOnD3D12EnumeratePhysicalDevices(
     uint32_t*         pPhysicalDeviceCount,
     VkPhysicalDevice* pPhysicalDevices)
 {
+    uint32_t curAdapter  = 0;
+    uint32_t numAdapters = 0;
+
     ComPtr<IDXGIAdapter1> adapter;
-    uint32_t              numAdapters = 0;
-    while (instance->factory->EnumAdapters1(numAdapters, &adapter) != DXGI_ERROR_NOT_FOUND)
+    while (instance->Get()->EnumAdapters1(curAdapter, &adapter) != DXGI_ERROR_NOT_FOUND)
     {
-        auto physicalDevice = new VkPhysicalDevice_T();
-        adapter->QueryInterface(IID_PPV_ARGS(&physicalDevice->adapter));
-        physicalDevice->adapter->GetDesc2(&physicalDevice->desc);
-
-        physicalDevice->index = numAdapters;
-
-        physicalDevice->instance = instance;
-
-        if (pPhysicalDevices)
+        DXGI_ADAPTER_DESC1 desc = {};
+        adapter->GetDesc1(&desc);
+        if (desc.Flags == DXGI_ADAPTER_FLAG_NONE)
         {
-            pPhysicalDevices[numAdapters] = physicalDevice;
-        }
+            if (pPhysicalDevices)
+            {
+                auto physicalDevice = new VkPhysicalDevice_T();
 
-        ++numAdapters;
+                HRESULT hr;
+                hr = adapter.As(&physicalDevice->adapter);
+                if (FAILED(hr))
+                {
+                    return VkResultFromHRESULT(hr);
+                }
+
+                physicalDevice->Get()->GetDesc2(&physicalDevice->desc);
+
+                physicalDevice->index    = curAdapter;
+                physicalDevice->instance = instance;
+
+                pPhysicalDevices[curAdapter] = physicalDevice;
+            }
+            ++numAdapters;
+        }
+        ++curAdapter;
     }
 
     *pPhysicalDeviceCount = numAdapters;
