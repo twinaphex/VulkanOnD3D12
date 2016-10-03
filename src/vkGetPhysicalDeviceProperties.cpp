@@ -146,7 +146,7 @@ void VKAPI_CALL VulkanOnD3D12GetPhysicalDeviceProperties(
     properties.driverVersion              = physicalDevice->desc.Revision;
     properties.vendorID                   = physicalDevice->desc.VendorId;
     properties.deviceID                   = physicalDevice->desc.DeviceId;
-    properties.deviceType                 = physicalDevice->desc.Flags == DXGI_ADAPTER_FLAG_SOFTWARE ? VK_PHYSICAL_DEVICE_TYPE_CPU : VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
+    properties.deviceType                 = VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
     properties.limits                     = limits;
     properties.sparseProperties           = sparseProperties;
 
