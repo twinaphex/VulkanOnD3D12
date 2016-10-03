@@ -44,6 +44,7 @@ struct VkPhysicalDevice_T
 {
     IDXGIAdapter3*     adapter;
     DXGI_ADAPTER_DESC2 desc;
+    uint32_t           index;
     VkInstance         instance;
 };
 

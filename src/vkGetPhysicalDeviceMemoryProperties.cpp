@@ -18,6 +18,25 @@ void VKAPI_CALL VulkanOnD3D12GetPhysicalDeviceMemoryProperties(
     VkPhysicalDevice                  physicalDevice,
     VkPhysicalDeviceMemoryProperties* pMemoryProperties)
 {
+    DXGI_QUERY_VIDEO_MEMORY_INFO localInfo = {};
+    physicalDevice->adapter->QueryVideoMemoryInfo(physicalDevice->index, DXGI_MEMORY_SEGMENT_GROUP_LOCAL, &localInfo);
+
+    DXGI_QUERY_VIDEO_MEMORY_INFO nonLocalInfo = {};
+    physicalDevice->adapter->QueryVideoMemoryInfo(physicalDevice->index, DXGI_MEMORY_SEGMENT_GROUP_NON_LOCAL, &nonLocalInfo);
+
+    VkPhysicalDeviceMemoryProperties memoryProperties = {};
+    memoryProperties.memoryTypeCount                  = 2;
+    memoryProperties.memoryTypes[0].propertyFlags     = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    memoryProperties.memoryTypes[0].heapIndex         = 0;
+    memoryProperties.memoryTypes[1].propertyFlags     = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+    memoryProperties.memoryTypes[1].heapIndex         = 1;
+    memoryProperties.memoryHeapCount                  = 2;
+    memoryProperties.memoryHeaps[0].size              = localInfo.Budget;
+    memoryProperties.memoryHeaps[0].flags             = VK_MEMORY_HEAP_DEVICE_LOCAL_BIT;
+    memoryProperties.memoryHeaps[1].size              = nonLocalInfo.Budget;
+    memoryProperties.memoryHeaps[1].flags             = 0;
+
+    *pMemoryProperties = memoryProperties;
 }
 
 extern "C" {
