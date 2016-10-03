@@ -25,6 +25,12 @@ VkResult VKAPI_CALL VulkanOnD3D12EnumerateDeviceExtensionProperties(
     VkExtensionProperties swapchainProperties = {VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_KHR_SWAPCHAIN_SPEC_VERSION};
     properties.push_back(swapchainProperties);
 
+    VkExtensionProperties csoProperties = {VK_CHB_CSO_SHADER_EXTENSION_NAME, VK_CHB_CSO_SHADER_SPEC_VERSION};
+    properties.push_back(csoProperties);
+
+    VkExtensionProperties hlslProperties = {VK_CHB_HLSL_SHADER_EXTENSION_NAME, VK_CHB_HLSL_SHADER_SPEC_VERSION};
+    properties.push_back(hlslProperties);
+
     if (pProperties)
     {
         for (auto i = 0; i < properties.size(); ++i)
