@@ -19,6 +19,15 @@ VkResult VKAPI_CALL VulkanOnD3D12ResetFences(
     uint32_t       fenceCount,
     const VkFence* pFences)
 {
+    for (uint32_t i = 0; i < fenceCount; ++i)
+    {
+        HRESULT hr;
+        hr = pFences[i]->Get()->Signal(0);
+        if (FAILED(hr))
+        {
+            return VkResultFromHRESULT(hr);
+        }
+    }
     return VK_SUCCESS;
 }
 

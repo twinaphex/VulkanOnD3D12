@@ -60,11 +60,16 @@ struct VkPhysicalDevice_T
 
 struct VkDevice_T
 {
-    ID3D12Device1*               device;
+    ComPtr<ID3D12Device1>        device;
     ComPtr<ID3D12DescriptorHeap> rtvHeap;
     ComPtr<ID3D12DescriptorHeap> dsvHeap;
     std::vector<VkQueue>         queues;
     VkPhysicalDevice             physicalDevice;
+
+    auto Get() const
+    {
+        return device.Get();
+    }
 };
 
 struct VkQueue_T
@@ -83,6 +88,12 @@ struct VkCommandBuffer_T
 
 struct VkFence_T
 {
+    ComPtr<ID3D12Fence> fence;
+
+    auto Get() const
+    {
+        return fence;
+    }
 };
 
 struct VkDeviceMemory_T

@@ -20,6 +20,22 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateFence(
     const VkAllocationCallbacks* pAllocator,
     VkFence*                     pFence)
 {
+    VkFence fence;
+    if (pAllocator)
+    {
+        fence = reinterpret_cast<VkFence>(pAllocator->pfnAllocation(nullptr, sizeof(VkFence_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        fence = new VkFence_T();
+    }
+
+    HRESULT hr;
+    hr = device->Get()->CreateFence(pCreateInfo->flags, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence->fence));
+    if (FAILED(hr))
+    {
+        return VkResultFromHRESULT(hr);
+    }
     return VK_SUCCESS;
 }
 

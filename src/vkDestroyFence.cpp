@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroyFence(
     VkFence                      fence,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, fence);
+    }
+    else
+    {
+        delete fence;
+    }
 }
 
 extern "C" {

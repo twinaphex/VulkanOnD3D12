@@ -18,8 +18,6 @@ void VKAPI_CALL VulkanOnD3D12DestroyDevice(
     VkDevice                     device,
     const VkAllocationCallbacks* pAllocator)
 {
-    device->device->Release();
-
     if (pAllocator)
     {
         pAllocator->pfnFree(nullptr, device);
