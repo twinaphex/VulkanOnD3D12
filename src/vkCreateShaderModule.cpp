@@ -20,6 +20,35 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateShaderModule(
     const VkAllocationCallbacks*    pAllocator,
     VkShaderModule*                 pShaderModule)
 {
+    VkShaderModule shaderModule;
+    if (pAllocator)
+    {
+        shaderModule = reinterpret_cast<VkShaderModule>(pAllocator->pfnAllocation(nullptr, sizeof(VkShaderModule_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        shaderModule = new VkShaderModule_T();
+    }
+
+    D3D12_SHADER_BYTECODE data = {};
+
+    std::string type(reinterpret_cast<const char*>(pCreateInfo->pCode));
+    type.resize(4);
+
+    if (type == "DXBC")
+    {
+        data.pShaderBytecode = pCreateInfo->pCode;
+        data.BytecodeLength  = pCreateInfo->codeSize;
+    }
+    else
+    {
+        return VK_ERROR_INITIALIZATION_FAILED;
+    }
+
+    shaderModule->data = data;
+
+    *pShaderModule = shaderModule;
+
     return VK_SUCCESS;
 }
 

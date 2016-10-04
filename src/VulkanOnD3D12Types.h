@@ -28,6 +28,7 @@
 #include <vulkan/vulkan.h>
 
 #include "d3dx12.h"
+#include <d3dcompiler.h>
 #include <dxgi1_5.h>
 #include <wrl.h>
 
@@ -128,6 +129,12 @@ struct VkImageView_T
 
 struct VkShaderModule_T
 {
+    D3D12_SHADER_BYTECODE data;
+
+    auto Get() const
+    {
+        return data;
+    }
 };
 
 struct VkPipelineCache_T
