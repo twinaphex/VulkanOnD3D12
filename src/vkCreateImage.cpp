@@ -20,6 +20,74 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateImage(
     const VkAllocationCallbacks* pAllocator,
     VkImage*                     pImage)
 {
+    VkImage image;
+    if (pAllocator)
+    {
+        image = reinterpret_cast<VkImage>(pAllocator->pfnAllocation(nullptr, sizeof(VkImage_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        image = new VkImage_T();
+    }
+
+    D3D12_CLEAR_VALUE     clear = {};
+    D3D12_RESOURCE_STATES state = D3D12_RESOURCE_STATE_COPY_DEST;
+    D3D12_RESOURCE_FLAGS  flags = D3D12_RESOURCE_FLAG_NONE;
+    if (pCreateInfo->usage & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT)
+    {
+        clear = CD3DX12_CLEAR_VALUE(VkFormatToD3D12(pCreateInfo->format), 1.0f, 0);
+        flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+        flags |= D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE;
+    }
+
+    D3D12_RESOURCE_DESC desc = {};
+    switch (pCreateInfo->imageType)
+    {
+    case VK_IMAGE_TYPE_1D:
+        desc = CD3DX12_RESOURCE_DESC::Tex1D(
+            VkFormatToD3D12(pCreateInfo->format),
+            pCreateInfo->extent.width,
+            pCreateInfo->arrayLayers,
+            pCreateInfo->mipLevels,
+            flags);
+        break;
+    case VK_IMAGE_TYPE_2D:
+        desc = CD3DX12_RESOURCE_DESC::Tex2D(
+            VkFormatToD3D12(pCreateInfo->format),
+            pCreateInfo->extent.width,
+            pCreateInfo->extent.height,
+            pCreateInfo->arrayLayers,
+            pCreateInfo->mipLevels,
+            pCreateInfo->samples,
+            0,
+            flags);
+        break;
+    case VK_IMAGE_TYPE_3D:
+        desc = CD3DX12_RESOURCE_DESC::Tex3D(
+            VkFormatToD3D12(pCreateInfo->format),
+            pCreateInfo->extent.width,
+            pCreateInfo->extent.height,
+            pCreateInfo->extent.depth,
+            pCreateInfo->mipLevels,
+            flags);
+        break;
+    }
+
+    HRESULT hr;
+    hr = device->device->CreateCommittedResource(
+        &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+        D3D12_HEAP_FLAG_NONE,
+        &desc,
+        state,
+        &clear,
+        IID_PPV_ARGS(&image->texture));
+    if (FAILED(hr))
+    {
+        return VkResultFromHRESULT(hr);
+    }
+
+    *pImage = image;
+
     return VK_SUCCESS;
 }
 
