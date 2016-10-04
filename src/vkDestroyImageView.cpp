@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroyImageView(
     VkImageView                  imageView,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, imageView);
+    }
+    else
+    {
+        delete imageView;
+    }
 }
 
 extern "C" {
