@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroyPipelineLayout(
     VkPipelineLayout             pipelineLayout,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, pipelineLayout);
+    }
+    else
+    {
+        delete pipelineLayout;
+    }
 }
 
 extern "C" {

@@ -68,7 +68,7 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateSwapchainKHR(
 
     HRESULT                 hr;
     ComPtr<IDXGISwapChain1> swapChain;
-    auto                    queue = device->queues[0]->queue;
+    auto                    queue = device->queues[0]->Get();
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     hr = device->physicalDevice->instance->factory->CreateSwapChainForHwnd(queue, pCreateInfo->surface->hwnd, &desc, nullptr, nullptr, &swapChain);
 #else

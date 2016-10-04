@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroyPipelineCache(
     VkPipelineCache              pipelineCache,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, pipelineCache);
+    }
+    else
+    {
+        delete pipelineCache;
+    }
 }
 
 extern "C" {

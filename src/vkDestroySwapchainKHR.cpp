@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroySwapchainKHR(
     VkSwapchainKHR               swapchain,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, swapchain);
+    }
+    else
+    {
+        delete swapchain;
+    }
 }
 
 extern "C" {

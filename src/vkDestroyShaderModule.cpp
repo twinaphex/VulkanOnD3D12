@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroyShaderModule(
     VkShaderModule               shaderModule,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, shaderModule);
+    }
+    else
+    {
+        delete shaderModule;
+    }
 }
 
 extern "C" {

@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroySemaphore(
     VkSemaphore                  semaphore,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, semaphore);
+    }
+    else
+    {
+        delete semaphore;
+    }
 }
 
 extern "C" {

@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroyBufferView(
     VkBufferView                 bufferView,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, bufferView);
+    }
+    else
+    {
+        delete bufferView;
+    }
 }
 
 extern "C" {

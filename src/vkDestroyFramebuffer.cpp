@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroyFramebuffer(
     VkFramebuffer                framebuffer,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, framebuffer);
+    }
+    else
+    {
+        delete framebuffer;
+    }
 }
 
 extern "C" {

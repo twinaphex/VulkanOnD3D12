@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroyCommandPool(
     VkCommandPool                commandPool,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, commandPool);
+    }
+    else
+    {
+        delete commandPool;
+    }
 }
 
 extern "C" {

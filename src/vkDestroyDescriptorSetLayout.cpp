@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroyDescriptorSetLayout(
     VkDescriptorSetLayout        descriptorSetLayout,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, descriptorSetLayout);
+    }
+    else
+    {
+        delete descriptorSetLayout;
+    }
 }
 
 extern "C" {

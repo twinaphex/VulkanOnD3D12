@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroyBuffer(
     VkBuffer                     buffer,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, buffer);
+    }
+    else
+    {
+        delete buffer;
+    }
 }
 
 extern "C" {

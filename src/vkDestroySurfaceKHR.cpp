@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroySurfaceKHR(
     VkSurfaceKHR                 surface,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, surface);
+    }
+    else
+    {
+        delete surface;
+    }
 }
 
 extern "C" {

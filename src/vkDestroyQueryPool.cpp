@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroyQueryPool(
     VkQueryPool                  queryPool,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, queryPool);
+    }
+    else
+    {
+        delete queryPool;
+    }
 }
 
 extern "C" {

@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroyEvent(
     VkEvent                      event,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, event);
+    }
+    else
+    {
+        delete event;
+    }
 }
 
 extern "C" {

@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroyRenderPass(
     VkRenderPass                 renderPass,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, renderPass);
+    }
+    else
+    {
+        delete renderPass;
+    }
 }
 
 extern "C" {

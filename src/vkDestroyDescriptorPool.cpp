@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroyDescriptorPool(
     VkDescriptorPool             descriptorPool,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, descriptorPool);
+    }
+    else
+    {
+        delete descriptorPool;
+    }
 }
 
 extern "C" {

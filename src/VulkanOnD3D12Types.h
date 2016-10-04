@@ -75,7 +75,12 @@ struct VkDevice_T
 
 struct VkQueue_T
 {
-    ID3D12CommandQueue* queue;
+    ComPtr<ID3D12CommandQueue> queue;
+
+    auto Get() const
+    {
+        return queue.Get();
+    }
 };
 
 struct VkSemaphore_T
@@ -84,7 +89,12 @@ struct VkSemaphore_T
 
 struct VkCommandBuffer_T
 {
-    ID3D12CommandList* list;
+    ComPtr<ID3D12CommandList> list;
+
+    auto Get() const
+    {
+        return list.Get();
+    }
 };
 
 struct VkFence_T
@@ -185,7 +195,12 @@ struct VkFramebuffer_T
 
 struct VkCommandPool_T
 {
-    ID3D12CommandAllocator* allocator;
+    ComPtr<ID3D12CommandAllocator> allocator;
+
+    auto Get() const
+    {
+        return allocator.Get();
+    }
 };
 
 struct VkSurfaceKHR_T
@@ -199,8 +214,13 @@ struct VkSurfaceKHR_T
 
 struct VkSwapchainKHR_T
 {
-    IDXGISwapChain4*      swapChain;
-    DXGI_SWAP_CHAIN_DESC1 desc;
+    ComPtr<IDXGISwapChain4> swapChain;
+    DXGI_SWAP_CHAIN_DESC1   desc;
+
+    auto Get() const
+    {
+        return swapChain.Get();
+    }
 };
 
 struct VkDisplayKHR_T

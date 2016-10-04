@@ -19,6 +19,14 @@ void VKAPI_CALL VulkanOnD3D12DestroySampler(
     VkSampler                    sampler,
     const VkAllocationCallbacks* pAllocator)
 {
+    if (pAllocator)
+    {
+        pAllocator->pfnFree(nullptr, sampler);
+    }
+    else
+    {
+        delete sampler;
+    }
 }
 
 extern "C" {
