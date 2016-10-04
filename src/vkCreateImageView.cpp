@@ -30,7 +30,7 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateImageView(
         view = new VkImageView_T();
     }
 
-    DXGI_FORMAT format = DXGI_FORMAT_B8G8R8A8_UNORM;
+    DXGI_FORMAT format = VkFormatToD3D12(pCreateInfo->format);
 
     if (pCreateInfo->image->texture->GetDesc().Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET)
     {
@@ -38,19 +38,56 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateImageView(
 
         D3D12_RENDER_TARGET_VIEW_DESC desc = {};
         desc.Format                        = format;
+        switch (pCreateInfo->viewType)
+        {
+        case VK_IMAGE_VIEW_TYPE_1D:
+            desc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE1D;
+            break;
+        case VK_IMAGE_VIEW_TYPE_2D:
+            desc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+            break;
+        case VK_IMAGE_VIEW_TYPE_3D:
+            desc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE3D;
+            break;
+        case VK_IMAGE_VIEW_TYPE_1D_ARRAY:
+            desc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE1DARRAY;
+            break;
+        case VK_IMAGE_VIEW_TYPE_2D_ARRAY:
+            desc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2DARRAY;
+            break;
+        default:
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
 
-        device->device->CreateRenderTargetView(pCreateInfo->image->texture, &desc, view->handle);
+        device->device->CreateRenderTargetView(pCreateInfo->image->Get(), &desc, view->handle);
         view->handle.Offset(device->device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
     }
 
-    if (pCreateInfo->image->texture->GetDesc().Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL)
+    if (pCreateInfo->image->Get()->GetDesc().Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL)
     {
         view->handle = CD3DX12_CPU_DESCRIPTOR_HANDLE(device->dsvHeap->GetCPUDescriptorHandleForHeapStart());
 
         D3D12_DEPTH_STENCIL_VIEW_DESC desc = {};
         desc.Format                        = format;
+        switch (pCreateInfo->viewType)
+        {
+        case VK_IMAGE_VIEW_TYPE_1D:
+            desc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE1D;
+            break;
+        case VK_IMAGE_VIEW_TYPE_2D:
+            desc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+            break;
+        case VK_IMAGE_VIEW_TYPE_1D_ARRAY:
+            desc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE1DARRAY;
+            break;
+        case VK_IMAGE_VIEW_TYPE_2D_ARRAY:
+            desc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2DARRAY;
+            break;
+        default:
+            return VK_ERROR_INITIALIZATION_FAILED;
+        }
 
-        device->device->CreateDepthStencilView(pCreateInfo->image->texture, &desc, view->handle);
+        device->device->CreateDepthStencilView(pCreateInfo->image->Get(), &desc, view->handle);
         view->handle.Offset(device->device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV));
     }
 

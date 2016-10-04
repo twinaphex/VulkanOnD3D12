@@ -93,7 +93,7 @@ struct VkFence_T
 
     auto Get() const
     {
-        return fence;
+        return fence.Get();
     }
 };
 
@@ -107,7 +107,12 @@ struct VkBuffer_T
 
 struct VkImage_T
 {
-    ID3D12Resource* texture;
+    ComPtr<ID3D12Resource> texture;
+
+    auto Get() const
+    {
+        return texture.Get();
+    }
 };
 
 struct VkEvent_T
@@ -125,6 +130,11 @@ struct VkBufferView_T
 struct VkImageView_T
 {
     CD3DX12_CPU_DESCRIPTOR_HANDLE handle;
+
+    auto Get() const
+    {
+        return handle;
+    }
 };
 
 struct VkShaderModule_T
