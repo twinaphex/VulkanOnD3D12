@@ -79,7 +79,7 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateImage(
         D3D12_HEAP_FLAG_NONE,
         &desc,
         state,
-        &clear,
+        (flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET) || (flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL) ? &clear : nullptr,
         IID_PPV_ARGS(&image->texture));
     if (FAILED(hr))
     {
