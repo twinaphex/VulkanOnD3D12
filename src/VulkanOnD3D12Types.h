@@ -211,6 +211,12 @@ struct VkSwapchainKHR_T
 
 struct VkDisplayKHR_T
 {
+    ComPtr<IDXGIOutput5> output;
+
+    auto Get() const
+    {
+        return output.Get();
+    }
 };
 
 struct VkDisplayModeKHR_T

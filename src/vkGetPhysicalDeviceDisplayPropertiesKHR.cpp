@@ -19,6 +19,50 @@ VkResult VKAPI_CALL VulkanOnD3D12GetPhysicalDeviceDisplayPropertiesKHR(
     uint32_t*               pPropertyCount,
     VkDisplayPropertiesKHR* pProperties)
 {
+    ComPtr<IDXGIOutput> output;
+    uint32_t            numOutputs = 0;
+    while (physicalDevice->adapter->EnumOutputs(numOutputs, &output) != DXGI_ERROR_NOT_FOUND)
+    {
+        auto display = new VkDisplayKHR_T();
+
+        HRESULT hr;
+        hr = output.As(&display->output);
+        if (FAILED(hr))
+        {
+            return VkResultFromHRESULT(hr);
+        }
+
+        DXGI_OUTPUT_DESC desc = {};
+        hr                    = display->Get()->GetDesc(&desc);
+        if (FAILED(hr))
+        {
+            return VkResultFromHRESULT(hr);
+        }
+
+        char name[32];
+        wcstombs_s(nullptr, name, desc.DeviceName, 32);
+
+        VkDisplayPropertiesKHR properties    = {};
+        properties.display                   = display;
+        properties.displayName               = name;
+        properties.physicalDimensions.width  = 0;
+        properties.physicalDimensions.height = 0;
+        properties.physicalResolution.width  = desc.DesktopCoordinates.right - desc.DesktopCoordinates.left;
+        properties.physicalResolution.height = desc.DesktopCoordinates.bottom - desc.DesktopCoordinates.top;
+        properties.supportedTransforms       = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR | VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR | VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR | VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR;
+        properties.planeReorderPossible;
+        properties.persistentContent;
+
+        if (pProperties)
+        {
+            pProperties[numOutputs] = properties;
+        }
+
+        ++numOutputs;
+    }
+
+    *pPropertyCount = numOutputs;
+
     return VK_SUCCESS;
 }
 
