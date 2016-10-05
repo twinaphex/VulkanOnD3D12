@@ -20,6 +20,18 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateDisplayPlaneSurfaceKHR(
     const VkAllocationCallbacks*         pAllocator,
     VkSurfaceKHR*                        pSurface)
 {
+    VkSurfaceKHR surface;
+    if (pAllocator)
+    {
+        surface = reinterpret_cast<VkSurfaceKHR>(pAllocator->pfnAllocation(nullptr, sizeof(VkSurfaceKHR_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        surface = new VkSurfaceKHR_T();
+    }
+
+    *pSurface = surface;
+
     return VK_SUCCESS;
 }
 

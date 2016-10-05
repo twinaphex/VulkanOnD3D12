@@ -20,6 +20,18 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateBuffer(
     const VkAllocationCallbacks* pAllocator,
     VkBuffer*                    pBuffer)
 {
+    VkBuffer buffer;
+    if (pAllocator)
+    {
+        buffer = reinterpret_cast<VkBuffer>(pAllocator->pfnAllocation(nullptr, sizeof(VkBuffer_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        buffer = new VkBuffer_T();
+    }
+
+    *pBuffer = buffer;
+
     return VK_SUCCESS;
 }
 

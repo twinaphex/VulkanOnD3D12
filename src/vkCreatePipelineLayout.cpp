@@ -20,6 +20,18 @@ VkResult VKAPI_CALL VulkanOnD3D12CreatePipelineLayout(
     const VkAllocationCallbacks*      pAllocator,
     VkPipelineLayout*                 pPipelineLayout)
 {
+    VkPipelineLayout pipelineLayout;
+    if (pAllocator)
+    {
+        pipelineLayout = reinterpret_cast<VkPipelineLayout>(pAllocator->pfnAllocation(nullptr, sizeof(VkPipelineLayout_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        pipelineLayout = new VkPipelineLayout_T();
+    }
+
+    *pPipelineLayout = pipelineLayout;
+
     return VK_SUCCESS;
 }
 

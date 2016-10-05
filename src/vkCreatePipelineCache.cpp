@@ -20,6 +20,18 @@ VkResult VKAPI_CALL VulkanOnD3D12CreatePipelineCache(
     const VkAllocationCallbacks*     pAllocator,
     VkPipelineCache*                 pPipelineCache)
 {
+    VkPipelineCache pipelineCache;
+    if (pAllocator)
+    {
+        pipelineCache = reinterpret_cast<VkPipelineCache>(pAllocator->pfnAllocation(nullptr, sizeof(VkPipelineCache_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        pipelineCache = new VkPipelineCache_T();
+    }
+
+    *pPipelineCache = pipelineCache;
+
     return VK_SUCCESS;
 }
 

@@ -20,6 +20,18 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateEvent(
     const VkAllocationCallbacks* pAllocator,
     VkEvent*                     pEvent)
 {
+    VkEvent event;
+    if (pAllocator)
+    {
+        event = reinterpret_cast<VkEvent>(pAllocator->pfnAllocation(nullptr, sizeof(VkEvent_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        event = new VkEvent_T();
+    }
+
+    *pEvent = event;
+
     return VK_SUCCESS;
 }
 

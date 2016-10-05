@@ -20,6 +20,18 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateBufferView(
     const VkAllocationCallbacks*  pAllocator,
     VkBufferView*                 pView)
 {
+    VkBufferView view;
+    if (pAllocator)
+    {
+        view = reinterpret_cast<VkBufferView>(pAllocator->pfnAllocation(nullptr, sizeof(VkBufferView_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        view = new VkBufferView_T();
+    }
+
+    *pView = view;
+
     return VK_SUCCESS;
 }
 

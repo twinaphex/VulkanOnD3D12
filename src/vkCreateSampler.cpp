@@ -20,6 +20,18 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateSampler(
     const VkAllocationCallbacks* pAllocator,
     VkSampler*                   pSampler)
 {
+    VkSampler sampler;
+    if (pAllocator)
+    {
+        sampler = reinterpret_cast<VkSampler>(pAllocator->pfnAllocation(nullptr, sizeof(VkSampler_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        sampler = new VkSampler_T();
+    }
+
+    *pSampler = sampler;
+
     return VK_SUCCESS;
 }
 

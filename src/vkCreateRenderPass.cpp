@@ -20,6 +20,18 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateRenderPass(
     const VkAllocationCallbacks*  pAllocator,
     VkRenderPass*                 pRenderPass)
 {
+    VkRenderPass renderPass;
+    if (pAllocator)
+    {
+        renderPass = reinterpret_cast<VkRenderPass>(pAllocator->pfnAllocation(nullptr, sizeof(VkRenderPass_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        renderPass = new VkRenderPass_T();
+    }
+
+    *pRenderPass = renderPass;
+
     return VK_SUCCESS;
 }
 

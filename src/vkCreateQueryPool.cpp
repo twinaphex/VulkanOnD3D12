@@ -20,6 +20,18 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateQueryPool(
     const VkAllocationCallbacks* pAllocator,
     VkQueryPool*                 pQueryPool)
 {
+    VkQueryPool queryPool;
+    if (pAllocator)
+    {
+        queryPool = reinterpret_cast<VkQueryPool>(pAllocator->pfnAllocation(nullptr, sizeof(VkQueryPool_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        queryPool = new VkQueryPool_T();
+    }
+
+    *pQueryPool = queryPool;
+
     return VK_SUCCESS;
 }
 

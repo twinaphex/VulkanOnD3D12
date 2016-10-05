@@ -21,6 +21,18 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateDisplayModeKHR(
     const VkAllocationCallbacks*      pAllocator,
     VkDisplayModeKHR*                 pMode)
 {
+    VkDisplayModeKHR mode;
+    if (pAllocator)
+    {
+        mode = reinterpret_cast<VkDisplayModeKHR>(pAllocator->pfnAllocation(nullptr, sizeof(VkDisplayModeKHR_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        mode = new VkDisplayModeKHR_T();
+    }
+
+    *pMode = mode;
+
     return VK_SUCCESS;
 }
 

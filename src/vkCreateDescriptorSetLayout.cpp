@@ -20,6 +20,18 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateDescriptorSetLayout(
     const VkAllocationCallbacks*           pAllocator,
     VkDescriptorSetLayout*                 pSetLayout)
 {
+    VkDescriptorSetLayout setLayout;
+    if (pAllocator)
+    {
+        setLayout = reinterpret_cast<VkDescriptorSetLayout>(pAllocator->pfnAllocation(nullptr, sizeof(VkDescriptorSetLayout_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        setLayout = new VkDescriptorSetLayout_T();
+    }
+
+    *pSetLayout = setLayout;
+
     return VK_SUCCESS;
 }
 

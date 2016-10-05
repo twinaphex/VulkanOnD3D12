@@ -36,6 +36,9 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateFence(
     {
         return VkResultFromHRESULT(hr);
     }
+
+    *pFence = fence;
+
     return VK_SUCCESS;
 }
 

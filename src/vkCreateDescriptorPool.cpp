@@ -20,6 +20,18 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateDescriptorPool(
     const VkAllocationCallbacks*      pAllocator,
     VkDescriptorPool*                 pDescriptorPool)
 {
+    VkDescriptorPool descriptorPool;
+    if (pAllocator)
+    {
+        descriptorPool = reinterpret_cast<VkDescriptorPool>(pAllocator->pfnAllocation(nullptr, sizeof(VkDescriptorPool_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        descriptorPool = new VkDescriptorPool_T();
+    }
+
+    *pDescriptorPool = descriptorPool;
+
     return VK_SUCCESS;
 }
 

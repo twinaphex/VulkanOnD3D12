@@ -20,6 +20,18 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateSemaphore(
     const VkAllocationCallbacks* pAllocator,
     VkSemaphore*                 pSemaphore)
 {
+    VkSemaphore semaphore;
+    if (pAllocator)
+    {
+        semaphore = reinterpret_cast<VkSemaphore>(pAllocator->pfnAllocation(nullptr, sizeof(VkSemaphore_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        semaphore = new VkSemaphore_T();
+    }
+
+    *pSemaphore = semaphore;
+
     return VK_SUCCESS;
 }
 

@@ -20,6 +20,18 @@ VkResult VKAPI_CALL VulkanOnD3D12CreateFramebuffer(
     const VkAllocationCallbacks*   pAllocator,
     VkFramebuffer*                 pFramebuffer)
 {
+    VkFramebuffer framebuffer;
+    if (pAllocator)
+    {
+        framebuffer = reinterpret_cast<VkFramebuffer>(pAllocator->pfnAllocation(nullptr, sizeof(VkFramebuffer_T), 8, VK_SYSTEM_ALLOCATION_SCOPE_OBJECT));
+    }
+    else
+    {
+        framebuffer = new VkFramebuffer_T();
+    }
+
+    *pFramebuffer = framebuffer;
+
     return VK_SUCCESS;
 }
 
