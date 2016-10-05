@@ -14,13 +14,18 @@
 
 #pragma once
 
+#if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
+#ifndef VK_USE_PLATFORM_WIN32_KHR
+#define VK_USE_PLATFORM_WIN32_KHR
+#endif // !VK_USE_PLATFORM_WIN32_KHR
+#else
+#ifndef VK_USE_PLATFORM_UAP_CHB
+#define VK_USE_PLATFORM_UAP_CHB
+#endif // !VK_USE_PLATFORM_UAP_CHB
+#endif // WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
+#include <vulkan/vulkan.h>
+
 #include "VulkanOnD3D12Types.h"
-
-#include <wrl.h>
-
-#include <vector>
-
-using namespace Microsoft::WRL;
 
 inline auto VkResultFromHRESULT(HRESULT hr)
 {

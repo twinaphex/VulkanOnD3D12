@@ -14,21 +14,7 @@
 
 #pragma once
 
-#include <Windows.h>
-
-#if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
-#ifndef VK_USE_PLATFORM_WIN32_KHR
-#define VK_USE_PLATFORM_WIN32_KHR
-#endif // !VK_USE_PLATFORM_WIN32_KHR
-#else
-#ifndef VK_USE_PLATFORM_UAP_CHB
-#define VK_USE_PLATFORM_UAP_CHB
-#endif // !VK_USE_PLATFORM_UAP_CHB
-#endif // WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
-#include <vulkan/vulkan.h>
-
 #include "d3dx12.h"
-#include <d3dcompiler.h>
 #include <dxgi1_5.h>
 #include <wrl.h>
 
